@@ -7,6 +7,31 @@ using System.Threading.Tasks;
 namespace Incapsulation.Failures
 {
 
+    public class Failures
+    {
+        List<FailureTypes> listOfFailured = null;
+
+        public Failures()
+        {
+            listOfFailured = new List<FailureTypes>();
+        }
+
+        public int this[int index]
+        {
+            set { listOfFailured[index] = (FailureTypes)(Enum.ToObject((typeof(FailureTypes)), value)); }
+        }
+
+
+        public enum FailureTypes
+        {
+            Unexpected,
+            Short,
+            Hardware,
+            Connection
+        }
+    }
+
+
     public class Common
     {
         public static int IsFailureSerious(int failureType)
@@ -57,7 +82,7 @@ namespace Incapsulation.Failures
 
             var problematicDevices = new HashSet<int>();
             for (int i = 0; i < failureTypes.Length; i++)
-                if (Common.IsFailureSerious(failureTypes[i])==1 && Common.Earlier(times[i], day, month, year)==1)
+                if (Common.IsFailureSerious(failureTypes[i]) == 1 && Common.Earlier(times[i], day, month, year) == 1)
                     problematicDevices.Add(deviceId[i]);
 
             var result = new List<string>();
@@ -65,8 +90,23 @@ namespace Incapsulation.Failures
                 if (problematicDevices.Contains((int)device["DeviceId"]))
                     result.Add(device["Name"] as string);
 
-            return result;
+            //return result;
+
+            DateTime currentDatetime = new DateTime(year, month, day);
+            Failures failures = new Failures();
+            for (int i = 0; i < failureTypes.Length; i++)
+            {
+                failures[i]
+            }
+
         }
-           
+
+        public static void FindDevicesFailedBeforeDate(DateTime currentDate, Failures failures)
+        {
+            
+        }
+
+
+
     }
 }
