@@ -16,32 +16,21 @@ namespace Incapsulation.Failures
 
     public class Failure
     {
-        public FailureTypes failure;
-        public int device;
-        public DateTime date;
+        public List<FailureTypes> listOfFailured = null;
 
-        public Failure(FailureTypes failure, int device, DateTime date)
+        public Failure()
         {
-            this.failure = (FailureTypes)failure;
-            this.device = device;
-            this.date = date;
-        }
-    }
-
-    public class ListOfFailure
-    {
-        public List<Failure> listOfFailured = null;
-
-        public ListOfFailure()
-        {
-            listOfFailured = new List<Failure>();
+            listOfFailured = new List<FailureTypes>();
         }
 
-        public Failure this[int index]
+        public int this[int index]
         {
             set
             {
-                listOfFailured.Add(new Failure(value.failure, value.device, value.date));
+                if (index >= 0 && index < 4)
+                {
+                    listOfFailured.Add((FailureTypes)index);
+                }
             }
         }
 
@@ -136,7 +125,7 @@ namespace Incapsulation.Failures
             //////////////////////////////////////////////////////////////
             DateTime currentDatetime = new DateTime(year, month, day);
             //////////////////////////////////////////////////////////////
-            ListOfFailure failures = new ListOfFailure();
+            Failure failures = new Failure();
             for (int i = 0; i < failureTypes.Length; i++)
             {
                 failures[i] = failureTypes[i];

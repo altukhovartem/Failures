@@ -1,0 +1,10 @@
+C:\MySource\Failures\obj\Debug\Incapsulation.Failures.csprojResolveAssemblyReference.cache
+C:\MySource\Failures\obj\Debug\Incapsulation.Failures.csproj.CoreCompileInputs.cache
+C:\MySource\Failures\bin\Debug\ReportMaker.cs
+C:\MySource\Failures\bin\Debug\Incapsulation.Failures.exe.config
+C:\MySource\Failures\bin\Debug\Incapsulation.Failures.exe
+C:\MySource\Failures\bin\Debug\Incapsulation.Failures.pdb
+C:\MySource\Failures\bin\Debug\nunit.framework.dll
+C:\MySource\Failures\bin\Debug\nunitlite.dll
+C:\MySource\Failures\obj\Debug\Incapsulation.Failures.exe
+C:\MySource\Failures\obj\Debug\Incapsulation.Failures.pdb

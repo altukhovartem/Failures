@@ -7,9 +7,9 @@ class Program
 {
 	static void Main(string[] args)
 	{
-        List<FailureTypes> qwe = new List<FailureTypes>();
-        qwe.Add(FailureTypes.Hardware);
-        System.Console.WriteLine(qwe[0]);
+        //List<FailureTypes> qwe = new List<FailureTypes>();
+        //qwe.Add(FailureTypes.Hardware);
+        //System.Console.WriteLine(qwe[0]);
 
 
 
