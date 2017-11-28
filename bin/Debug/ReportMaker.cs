@@ -26,52 +26,36 @@ namespace Incapsulation.Failures
             this.device = device;
             this.date = date;
         }
+
+        public static bool IsFailureSerious(int failureType)
+        {
+            if (failureType % 2 == 0)
+                return true;
+            else
+                return false;
+        }
+
+        public bool Earlier(DateTime currentDatetime)
+        {
+
+            if (this.date < currentDatetime)
+                return true;
+            else
+                return false;
+        }
     }
-
-    public class ListOfFailure
-    {
-        public List<Failure> listOfFailured = null;
-
-        public ListOfFailure()
-        {
-            listOfFailured = new List<Failure>();
-        }
-
-        public Failure this[int index]
-        {
-            set
-            {
-                listOfFailured.Add(new Failure(value.failure, value.device, value.date));
-            }
-        }
-
-        public static int IsFailureSerious(int failureType)
-        {
-            if (failureType % 2 == 0) return 1;
-            return 0;
-        }
-
-    }
+    
 
     public class Device
     {
-        public Dictionary<string, object> dictionaryOfDevices = null;
+        public int ID { get; set; }
+        public string Name { get; set; }
 
-        public Device()
+        public Device(int id, string name)
         {
-            dictionaryOfDevices = new Dictionary<string, object>();
+            this.ID = id;
+            this.Name = name;
         }
-
-        public KeyValuePair<string, object> this[int index]
-        {
-            set
-            {
-                dictionaryOfDevices.Add(value.Key, value.Value);
-            }
-        }
-
-
-
     }
 
 
@@ -136,34 +120,62 @@ namespace Incapsulation.Failures
             //////////////////////////////////////////////////////////////
             DateTime currentDatetime = new DateTime(year, month, day);
             //////////////////////////////////////////////////////////////
-            ListOfFailure failures = new ListOfFailure();
+            List<Failure> failures = new List<Failure>();
 
             for (int i = 0; i < failureTypes.Length; i++)
             {
-
                 Failure currentFailure = new Failure
                 (
                     (FailureTypes)failureTypes[i],
                     deviceId[i],
                     new DateTime(Convert.ToInt32(times[i][2]), Convert.ToInt32(times[i][1]), Convert.ToInt32(times[i][0]))
                 );
-                failures[i] = currentFailure;
+                failures.Add(currentFailure);
             }
             //////////////////////////////////////////////////////////////
-            Device listOfDevices = new Device();
+            List<Device> listOfDevices = new List<Device>(); 
             for (int i = 0; i < devices.Count; i++)
             {
-                KeyValuePair<string, object> pair = new KeyValuePair<string, object>(devices[i].Values.First().ToString(), devices[i].Values.Last());
-                listOfDevices[i] = pair; 
+                Device currentDevice = new Device(Convert.ToInt32(devices[i].Values.First()), devices[i].Values.Last().ToString());
+                listOfDevices.Add(currentDevice);
             }
             //////////////////////////////////////////////////////////////
 
-            return result;
+            return FindDevicesFailedBeforeDate(currentDatetime, failures, listOfDevices);
+
+            //List<string> resultX = new List<string>();
+            //for (int i = 0; i < failures.Count; i++)
+            //{
+            //    if (Failure.IsFailureSerious(Convert.ToInt32(failures[i].failure)) && failures[i].Earlier(currentDatetime))
+            //    {
+            //        foreach (var item in listOfDevices)
+            //        {
+            //            if (item.ID == failures[i].device)
+            //                resultX.Add(item.Name);
+            //        }
+            //    }
+            //}
+
+            //return resultX;
         }
 
-        public static void FindDevicesFailedBeforeDate(DateTime currentDate, Failure failures)
+        public static List<string> FindDevicesFailedBeforeDate(DateTime currentDatetime, List<Failure> failures, List<Device> listOfDevices)
         {
-            
+
+            List<string> resultX = new List<string>();
+            for (int i = 0; i < failures.Count; i++)
+            {
+                if (Failure.IsFailureSerious(Convert.ToInt32(failures[i].failure)) && failures[i].Earlier(currentDatetime))
+                {
+                    foreach (var item in listOfDevices)
+                    {
+                        if (item.ID == failures[i].device)
+                            resultX.Add(item.Name);
+                    }
+                }
+            }
+
+            return resultX;
         }
 
 

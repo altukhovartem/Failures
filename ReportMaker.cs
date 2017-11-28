@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Incapsulation.Failures
 {
-    public enum FailureTypes
+    public enum FailureType
     {
         Unexpected = 0,
         Short,
@@ -16,13 +16,13 @@ namespace Incapsulation.Failures
 
     public class Failure
     {
-        public FailureTypes failure;
+        public FailureType failure;
         public int device;
         public DateTime date;
 
-        public Failure(FailureTypes failure, int device, DateTime date)
+        public Failure(FailureType failure, int device, DateTime date)
         {
-            this.failure = (FailureTypes)failure;
+            this.failure = (FailureType)failure;
             this.device = device;
             this.date = date;
         }
@@ -42,63 +42,19 @@ namespace Incapsulation.Failures
                 return true;
             else
                 return false;
-
         }
     }
-
-    public class ListOfFailure
-    {
-        public List<Failure> listOfFailured = null;
-        public int Length { get; private set; }
-
-        public ListOfFailure()
-        {
-            listOfFailured = new List<Failure>();
-        }
-
-        public Failure this[int index]
-        {
-            set
-            {
-                listOfFailured.Add(new Failure(value.failure, value.device, value.date));
-                Length++;
-            }
-            get
-            {
-                return listOfFailured[index];
-            }
-        }
-
-        
-
-    }
+    
 
     public class Device
     {
-        public Dictionary<string, object> dictionaryOfDevices = null;
+        public int ID { get; set; }
+        public string Name { get; set; }
 
-        public Device()
+        public Device(int id, string name)
         {
-            dictionaryOfDevices = new Dictionary<string, object>();
-        }
-
-        public KeyValuePair<string, object> this[int index]
-        {
-            set
-            {
-                dictionaryOfDevices.Add(value.Key, value.Value);
-            }
-            get
-            {
-                foreach (var item in dictionaryOfDevices)
-                {
-                    if (item.Key == index.ToString())
-                    {
-                        return new KeyValuePair<string, object>(item.Key, item.Value);
-                    }
-                }
-                throw new Exception("Нет такого девайса");
-            }
+            this.ID = id;
+            this.Name = name;
         }
     }
 
@@ -161,49 +117,50 @@ namespace Incapsulation.Failures
                 if (problematicDevices.Contains((int)device["DeviceId"]))
                     result.Add(device["Name"] as string);
 
-            //////////////////////////////////////////////////////////////
             DateTime currentDatetime = new DateTime(year, month, day);
-            //////////////////////////////////////////////////////////////
-            ListOfFailure failures = new ListOfFailure();
+            
+            List<Failure> failures = new List<Failure>();
 
             for (int i = 0; i < failureTypes.Length; i++)
             {
-
                 Failure currentFailure = new Failure
                 (
-                    (FailureTypes)failureTypes[i],
+                    (FailureType)failureTypes[i],
                     deviceId[i],
                     new DateTime(Convert.ToInt32(times[i][2]), Convert.ToInt32(times[i][1]), Convert.ToInt32(times[i][0]))
                 );
-                failures[i] = currentFailure;
+                failures.Add(currentFailure);
             }
-            //////////////////////////////////////////////////////////////
-            Device listOfDevices = new Device();
+            
+            List<Device> listOfDevices = new List<Device>(); 
             for (int i = 0; i < devices.Count; i++)
             {
-                KeyValuePair<string, object> pair = new KeyValuePair<string, object>(devices[i].Values.First().ToString(), devices[i].Values.Last());
-                listOfDevices[i] = pair; 
+                Device currentDevice = new Device(Convert.ToInt32(devices[i].Values.First()), devices[i].Values.Last().ToString());
+                listOfDevices.Add(currentDevice);
             }
-            //////////////////////////////////////////////////////////////
+            
+            return FindDevicesFailedBeforeDate(currentDatetime, failures, listOfDevices);
 
-            Device issueDevices = new Device();
-            int j = 0;
-            for (int i = 0; i < failures.Length; i++)
-            {
-                Failure currentFailure = failures[i];
-                if (Failure.IsFailureSerious((int)currentFailure.failure) && currentFailure.Earlier(currentDatetime))
-                {
-                    issueDevices[j] = listOfDevices[1];
-                    j++;
-                } 
-            }   
-
-            return issueDevices.dictionaryOfDevices.Values;
+            
         }
 
-        public static void FindDevicesFailedBeforeDate(DateTime currentDate, Failure failures)
+        public static List<string> FindDevicesFailedBeforeDate(DateTime currentDatetime, List<Failure> failures, List<Device> listOfDevices)
         {
-            
+
+            List<string> resultX = new List<string>();
+            for (int i = 0; i < failures.Count; i++)
+            {
+                if (Failure.IsFailureSerious(Convert.ToInt32(failures[i].failure)) && failures[i].Earlier(currentDatetime))
+                {
+                    foreach (var item in listOfDevices)
+                    {
+                        if (item.ID == failures[i].device)
+                            resultX.Add(item.Name);
+                    }
+                }
+            }
+
+            return resultX;
         }
 
 
