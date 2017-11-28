@@ -16,21 +16,32 @@ namespace Incapsulation.Failures
 
     public class Failure
     {
-        public List<FailureTypes> listOfFailured = null;
+        public FailureTypes failure;
+        public int device;
+        public DateTime date;
 
-        public Failure()
+        public Failure(FailureTypes failure, int device, DateTime date)
         {
-            listOfFailured = new List<FailureTypes>();
+            this.failure = (FailureTypes)failure;
+            this.device = device;
+            this.date = date;
+        }
+    }
+
+    public class ListOfFailure
+    {
+        public List<Failure> listOfFailured = null;
+
+        public ListOfFailure()
+        {
+            listOfFailured = new List<Failure>();
         }
 
-        public int this[int index]
+        public Failure this[int index]
         {
             set
             {
-                if (index >= 0 && index < 4)
-                {
-                    listOfFailured.Add((FailureTypes)index);
-                }
+                listOfFailured.Add(new Failure(value.failure, value.device, value.date));
             }
         }
 
@@ -125,10 +136,18 @@ namespace Incapsulation.Failures
             //////////////////////////////////////////////////////////////
             DateTime currentDatetime = new DateTime(year, month, day);
             //////////////////////////////////////////////////////////////
-            Failure failures = new Failure();
+            ListOfFailure failures = new ListOfFailure();
+
             for (int i = 0; i < failureTypes.Length; i++)
             {
-                failures[i] = failureTypes[i];
+
+                Failure currentFailure = new Failure
+                (
+                    (FailureTypes)failureTypes[i],
+                    deviceId[i],
+                    new DateTime(Convert.ToInt32(times[i][2]), Convert.ToInt32(times[i][1]), Convert.ToInt32(times[i][0]))
+                );
+                failures[i] = currentFailure;
             }
             //////////////////////////////////////////////////////////////
             Device listOfDevices = new Device();

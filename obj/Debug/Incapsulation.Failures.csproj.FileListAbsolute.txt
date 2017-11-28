@@ -8,3 +8,12 @@ C:\MySource\Failures\bin\Debug\nunit.framework.dll
 C:\MySource\Failures\bin\Debug\nunitlite.dll
 C:\MySource\Failures\obj\Debug\Incapsulation.Failures.exe
 C:\MySource\Failures\obj\Debug\Incapsulation.Failures.pdb
+C:\source\Failures\bin\Debug\Incapsulation.Failures.exe.config
+C:\source\Failures\obj\Debug\Incapsulation.Failures.exe
+C:\source\Failures\obj\Debug\Incapsulation.Failures.pdb
+C:\source\Failures\bin\Debug\ReportMaker.cs
+C:\source\Failures\bin\Debug\Incapsulation.Failures.exe
+C:\source\Failures\bin\Debug\Incapsulation.Failures.pdb
+C:\source\Failures\bin\Debug\nunit.framework.dll
+C:\source\Failures\bin\Debug\nunitlite.dll
+C:\source\Failures\obj\Debug\Incapsulation.Failures.csprojResolveAssemblyReference.cache
